@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy to GKE') {
             steps{
                 sh '''
-                sed -i "s/us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative:latest/us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative:${env.BUILD_ID}/g" deployment.yml
+                sed -i deployment.yml
                 '''
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
