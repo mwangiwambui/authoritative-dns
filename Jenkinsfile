@@ -1,43 +1,42 @@
-try {
-  node {
-        def app
-        
-        stage('Clone Repository') 
-        {
-            git([url: 'https://github.com/mwangiwambui/authoritative-dns', branch: 'main', credentialsId: 'mwangiwambuigit'])
+pipeline {
+    agent any
+    environment {
+        PROJECT_ID = 'devops-capstone-project-395319'
+        LOCATION = 'us-central1-docker'
+        CREDENTIALS_ID = 'gcr:devops-capstone-project-395319'
+    }
+    stages {
+        stage("Checkout code") {
+            steps {
+                git([url: 'https://github.com/mwangiwambui/authoritative-dns', branch: 'main', credentialsId: 'mwangiwambuigit'])
+            }
         }
-        
- 
-        stage('Build Docker Image') {
-            app = docker.build("us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative")
-        }
-        
-        
-        stage('Push Image to openshift prod Registry') {
-            retry(3) {
-                env.VERSION = version()
-                docker.withRegistry('https://gcr.io', 'gcr:devops-capstone-project-395319') {
-                    // app.push("us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative")
-                    app.push("latest")
+    stage("Build image") {
+            steps {
+                script {
+                    app = docker.build("us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative")
                 }
             }
+        }
+        stage("Push image") {
+            steps {
+                script {
+                    docker.withRegistry('https://gcr.io', 'gcr:devops-capstone-project-395319') {
+                            myapp.push("latest")
+                            myapp.push("${env.BUILD_ID}")
+                    }
+                }
             }
-        
-    }   
-} catch(Error|Exception e) {
-  //Finish failing the build after telling someone about it
-  throw e
-} finally {
-    // Post build steps here
-    /* Success or failure, always run post build steps */
-    // send email
-    // publish test results etc etc
+        }        
+        stage('Deploy to GKE') {
+            steps{
+                sh "sed -i 's/hello:latest/hello:${env.BUILD_ID}/g' deployment.yaml"
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            }
+        }
+    }    
 }
-def version()
-{
-    
-    return 1.0
-}
+
 
 
 // @Library('global_shared_library') _ runPipeline(agent: 'nodejs-docker', environment: 'aws', technology: 'nodejs', account_name: 'DE', ENV_UAT: 'SIMPORTALSERVER_UAT', include_env:'true')

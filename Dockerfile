@@ -8,7 +8,7 @@ RUN apt update \
   nano \
   vim \
   curl \
-  docker \
+  docker \  
   net-tools \
   iputils-ping \
   iputils-tracepath \
