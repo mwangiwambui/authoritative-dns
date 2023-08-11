@@ -14,7 +14,11 @@ pipeline {
     stage("Build image") {
             steps {
                 script {
+                  agent {
+                docker {
                     app = docker.build("us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative")
+                }
+                  }
                 }
             }
         }
