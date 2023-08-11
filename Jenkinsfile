@@ -25,9 +25,13 @@ pipeline {
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io', 'gcr:devops-capstone-project-395319') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
+                    agent {
+                      docker {
+                        docker.withRegistry('https://gcr.io', 'gcr:devops-capstone-project-395319') {
+                                myapp.push("latest")
+                                myapp.push("${env.BUILD_ID}")
+                        }
+                      }
                     }
                 }
             }
