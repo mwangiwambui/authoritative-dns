@@ -17,6 +17,7 @@ RUN apt update \
 
 COPY config/named.conf /etc/bind/
 COPY config/named.conf.local /etc/bind/
+COPY config/named.conf.options /etc/bind/
 COPY config/db.safbiz.co.ke /etc/bind/
 COPY config/db.41.203.208.rev /etc/bind/
 
