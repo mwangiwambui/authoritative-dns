@@ -20,5 +20,5 @@ options {
 	//========================================================================
 	dnssec-validation auto;
 
-	listen-on-v6 { any; };
+  listen-on port 53 { any; };
 };
