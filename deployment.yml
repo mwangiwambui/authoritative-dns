@@ -51,11 +51,7 @@ spec:
     spec:
       containers:
       - name: bind9
-        #        image: ubuntu/bind9:edge
-        image: us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative:latest
-        # volumeMounts:
-        # - name: auth-bind9-pvc
-        #   mountPath: /thkisilon_container_nfs/dns-authoritative/config        
+        image: us-central1-docker.pkg.dev/devops-capstone-project-395319/dns-authoritative/dns-authoritative:latest    
         env:
         - name: ALLOW_QUERY
           value: any
