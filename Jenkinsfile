@@ -46,7 +46,3 @@ pipeline {
         }
     }    
 }
-
-
-
-// @Library('global_shared_library') _ runPipeline(agent: 'nodejs-docker', environment: 'aws', technology: 'nodejs', account_name: 'DE', ENV_UAT: 'SIMPORTALSERVER_UAT', include_env:'true')
