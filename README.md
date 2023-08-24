@@ -1,4 +1,6 @@
-# TES Authoritative DNS
+# Authoritative DNS CICD pipeline.
+
+This project deploys a Bind9 service to GKE using Jenkins. Its a demonstration of continuous integration of services.
 
 
 ## Preriquisites
